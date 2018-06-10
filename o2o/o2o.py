@@ -23,6 +23,21 @@ if __name__ == '__main__':
         else:
             return 0
 
+    def classify(s): # 直接优惠记为0，满减记为1
+        s = str(s)
+        s = s.split(':')
+        if len(s) == 1:
+            return 0
+        else:
+            return 1
+
+    def is_firstorlast(s):
+        if s == 0:
+            return 1
+        else:
+            return 0
+
+
 
 
 
@@ -82,119 +97,119 @@ if __name__ == '__main__':
     # 对dataSet3_on_feature3
 
     # 每个用户消费的总次数user_online_buy_total
-    # t = pd.DataFrame(dataSet3_on_feature3[['user_id','date']])
-    # t = t[t['date'].notnull() == True]
-    # t = pd.DataFrame(t['user_id'],columns=['user_id'])
-    # t['user_online_buy_total'] = 1
-    # t = t.groupby('user_id',sort=False).agg('sum').reset_index()
-    #
-    # # 每个用户使用消费券消费的次数use_online_buy_coupon
-    # t1 = pd.DataFrame(dataSet3_on_feature3[['user_id','action','coupon_id']])
-    # t1 = t1[(t1['action'] == 1)&(t1['coupon_id'].notnull()==True)&(t1['coupon_id']!='fixed')]
-    # t1 = pd.DataFrame(t1['user_id'], columns=['user_id'])
-    # t1['use_online_buy_coupon'] = 1
-    # t1 = t1.groupby('user_id', sort=False).agg('sum').reset_index()
-    #
-    # # 每个用户领取的消费券的总数user_online_coupon_receivedAll
-    # t2 = pd.DataFrame(dataSet3_on_feature3[['user_id', 'action', 'coupon_id']])
-    # t2 = t2[(t2['action'] == 2) & (t2['coupon_id'].notnull() == True) & (t2['coupon_id'] != 'fixed')]
-    # t2 = pd.DataFrame(t2['user_id'], columns=['user_id'])
-    # t2['user_online_coupon_receivedAll'] = 1
-    # t2 = t2.groupby('user_id', sort=False).agg('sum').reset_index()
-    #
-    # # 每个用户在限时低价时消费的次数user_online_buy_fixed
-    # t3 = pd.DataFrame(dataSet3_on_feature3[['user_id', 'action', 'coupon_id']])
-    # t3 = t3[(t3['action'] == 1) & (t3['coupon_id'] == 'fixed')]
-    # t3 = pd.DataFrame(t3['user_id'], columns=['user_id'])
-    # t3['user_online_buy_fixed'] = 1
-    # t3 = t3.groupby('user_id', sort=False).agg('sum').reset_index()
-    #
-    # # 用户购买东西的商店的个数user_online_buy_merchantCount
-    # t4 = pd.DataFrame(dataSet3_on_feature3[['user_id', 'action', 'merchant_id']])
-    # t4 = t4[(t4['action'] == 1) & (t4['merchant_id'].notnull()==True)]
-    # t4 = pd.DataFrame(t4['user_id'], columns=['user_id'])
-    # t4['user_online_buy_merchantCount'] = 1
-    # t4 = t4.groupby('user_id', sort=False).agg('sum').reset_index()
-    #
-    # # 每个用户看过的商店的个数包括只点击user_online_action_merchantCount
-    # t5 = pd.DataFrame(dataSet3_on_feature3[['user_id','merchant_id']])
-    # t5 = t5[(t5['merchant_id'].notnull() == True)]
-    # t5 = pd.DataFrame(t5['user_id'], columns=['user_id'])
-    # t5['user_online_action_merchantCount'] = 1
-    # t5 = t5.groupby('user_id', sort=False).agg('sum').reset_index()
-    #
-    # # 每个用户行为的个数user_online_action_count
-    # t6 = pd.DataFrame(dataSet3_on_feature3[['user_id', 'action']])
-    # t6 = t6[(t6['action'].notnull() == True)]
-    # t6 = pd.DataFrame(t6['user_id'], columns=['user_id'])
-    # t6['user_online_action_count'] = 1
-    # t6 = t6.groupby('user_id', sort=False).agg('sum').reset_index()
-    #
-    # # 每个用户点击个数user_online_click_count
-    # t7 = pd.DataFrame(dataSet3_on_feature3[['user_id', 'action']])
-    # t7 = t7[(t7['action'].notnull() == True)&(t7['action']==0)]
-    # t7 = pd.DataFrame(t7['user_id'], columns=['user_id'])
-    # t7['user_online_click_count'] = 1
-    # t7 = t7.groupby('user_id', sort=False).agg('sum').reset_index()
-    #
-    # # 每个用户领取了优惠券没有使用的次数user_online_notUseReceive_coupon
-    # t8 = pd.DataFrame(dataSet3_on_feature3[['user_id', 'action','date']])
-    # t8 = t8[(t8['action'].notnull() == True) & (t8['action'] == 2)&(t8['date'].isnull()==True)]
-    # t8 = pd.DataFrame(t8['user_id'], columns=['user_id'])
-    # t8['user_online_notUseReceive_coupon'] = 1
-    # t8 = t8.groupby('user_id', sort=False).agg('sum').reset_index()
-    #
-    # # 每个用户没有使用消费券消费的次数user_online_notUse_coupon
-    # t9 = pd.DataFrame(dataSet3_on_feature3[['user_id', 'coupon_id', 'date']])
-    # t9 = t9[(t9['date'].notnull() == True) & (t9['coupon_id'].isnull() == True)]
-    # t9 = pd.DataFrame(t9['user_id'], columns=['user_id'])
-    # t9['user_online_notUse_coupon'] = 1
-    # t9 = t9.groupby('user_id', sort=False).agg('sum').reset_index()
-    #
-    # # 合并数据
-    # left = dataSet3_on_feature3[['user_id']].drop_duplicates()
-    # dataSet3_on_result = pd.merge(left,t,how='left',on=['user_id'])
-    # dataSet3_on_result = pd.merge(dataSet3_on_result,t1,how='left',on='user_id')
-    # dataSet3_on_result = pd.merge(dataSet3_on_result,t2,how='left',on='user_id')
-    # dataSet3_on_result = pd.merge(dataSet3_on_result,t3,how='left',on='user_id')
-    # dataSet3_on_result = pd.merge(dataSet3_on_result,t4,how='left',on='user_id')
-    # dataSet3_on_result = pd.merge(dataSet3_on_result,t5,how='left',on='user_id')
-    # dataSet3_on_result = pd.merge(dataSet3_on_result,t6,how='left',on='user_id')
-    # dataSet3_on_result = pd.merge(dataSet3_on_result,t7,how='left',on='user_id')
-    # dataSet3_on_result = pd.merge(dataSet3_on_result,t8,how='left',on='user_id')
-    # dataSet3_on_result = pd.merge(dataSet3_on_result,t9,how='left',on='user_id')
-    #
-    # # 替换每列中的Nan,用平均值来代替
-    # for i in dataSet3_on_result.columns:
-    #     meanVal = dataSet3_on_result[i].mean()
-    #     dataSet3_on_result[i].fillna(meanVal,inplace=True)
-    #
-    # # 使用消费券消费的次数占总消费次数的占比 user_online_buy_couponRate (use_online_buy_coupon/user_online_buy_total)
-    # t10 = dataSet3_on_result['use_online_buy_coupon']
-    # t_10 = dataSet3_on_result['user_online_buy_total']
-    # t10 = t10/t_10
-    # dataSet3_on_result['user_online_buy_couponRate'] = t10
-    #
-    # # 用户使用消费券占领取的消费券的比重  uses_online_coupon_buyRate (use_online_buy_coupon/user_online_coupon_receivedAll)
-    # t11 = dataSet3_on_result['use_online_buy_coupon']
-    # t_11 = dataSet3_on_result['user_online_coupon_receivedAll']
-    # t11 = t11/t_11
-    # dataSet3_on_result['uses_online_coupon_buyRate'] = t11
-    #
-    # # 每个用户限时低价消费占总消费的比重 user_online_buy_fixedRate (user_online_buy_fixed/user_online_buy_total)
-    # t12 = dataSet3_on_result['user_online_buy_fixed']
-    # t_12 = dataSet3_on_result['user_online_buy_total']
-    # t12 = t12/t_12
-    # dataSet3_on_result['user_online_buy_fixedRate'] = t12
-    #
-    # # 消费的商店占有过行为的商店的比重 user_online_merchantBuyRate (user_online_buy_merchantCount/user_online_action_merchantCount)
-    # t13 = dataSet3_on_result['user_online_buy_merchantCount']
-    # t_13 = dataSet3_on_result['user_online_action_merchantCount']
-    # t13 = t13/t_13
-    # dataSet3_on_result['user_online_merchantBuyRate'] = t13
-    #
-    # dataSet3_on_result.to_csv('dataSet3_on_feature.csv', index=None)
-    #
+    t = pd.DataFrame(dataSet3_on_feature3[['user_id','date']])
+    t = t[t['date'].notnull() == True]
+    t = pd.DataFrame(t['user_id'],columns=['user_id'])
+    t['user_online_buy_total'] = 1
+    t = t.groupby('user_id',sort=False).agg('sum').reset_index()
+
+    # 每个用户使用消费券消费的次数use_online_buy_coupon
+    t1 = pd.DataFrame(dataSet3_on_feature3[['user_id','action','coupon_id']])
+    t1 = t1[(t1['action'] == 1)&(t1['coupon_id'].notnull()==True)&(t1['coupon_id']!='fixed')]
+    t1 = pd.DataFrame(t1['user_id'], columns=['user_id'])
+    t1['use_online_buy_coupon'] = 1
+    t1 = t1.groupby('user_id', sort=False).agg('sum').reset_index()
+
+    # 每个用户领取的消费券的总数user_online_coupon_receivedAll
+    t2 = pd.DataFrame(dataSet3_on_feature3[['user_id', 'action', 'coupon_id']])
+    t2 = t2[(t2['action'] == 2) & (t2['coupon_id'].notnull() == True) & (t2['coupon_id'] != 'fixed')]
+    t2 = pd.DataFrame(t2['user_id'], columns=['user_id'])
+    t2['user_online_coupon_receivedAll'] = 1
+    t2 = t2.groupby('user_id', sort=False).agg('sum').reset_index()
+
+    # 每个用户在限时低价时消费的次数user_online_buy_fixed
+    t3 = pd.DataFrame(dataSet3_on_feature3[['user_id', 'action', 'coupon_id']])
+    t3 = t3[(t3['action'] == 1) & (t3['coupon_id'] == 'fixed')]
+    t3 = pd.DataFrame(t3['user_id'], columns=['user_id'])
+    t3['user_online_buy_fixed'] = 1
+    t3 = t3.groupby('user_id', sort=False).agg('sum').reset_index()
+
+    # 用户购买东西的商店的个数user_online_buy_merchantCount
+    t4 = pd.DataFrame(dataSet3_on_feature3[['user_id', 'action', 'merchant_id']])
+    t4 = t4[(t4['action'] == 1) & (t4['merchant_id'].notnull()==True)]
+    t4 = pd.DataFrame(t4['user_id'], columns=['user_id'])
+    t4['user_online_buy_merchantCount'] = 1
+    t4 = t4.groupby('user_id', sort=False).agg('sum').reset_index()
+
+    # 每个用户看过的商店的个数包括只点击user_online_action_merchantCount
+    t5 = pd.DataFrame(dataSet3_on_feature3[['user_id','merchant_id']])
+    t5 = t5[(t5['merchant_id'].notnull() == True)]
+    t5 = pd.DataFrame(t5['user_id'], columns=['user_id'])
+    t5['user_online_action_merchantCount'] = 1
+    t5 = t5.groupby('user_id', sort=False).agg('sum').reset_index()
+
+    # 每个用户行为的个数user_online_action_count
+    t6 = pd.DataFrame(dataSet3_on_feature3[['user_id', 'action']])
+    t6 = t6[(t6['action'].notnull() == True)]
+    t6 = pd.DataFrame(t6['user_id'], columns=['user_id'])
+    t6['user_online_action_count'] = 1
+    t6 = t6.groupby('user_id', sort=False).agg('sum').reset_index()
+
+    # 每个用户点击个数user_online_click_count
+    t7 = pd.DataFrame(dataSet3_on_feature3[['user_id', 'action']])
+    t7 = t7[(t7['action'].notnull() == True)&(t7['action']==0)]
+    t7 = pd.DataFrame(t7['user_id'], columns=['user_id'])
+    t7['user_online_click_count'] = 1
+    t7 = t7.groupby('user_id', sort=False).agg('sum').reset_index()
+
+    # 每个用户领取了优惠券没有使用的次数user_online_notUseReceive_coupon
+    t8 = pd.DataFrame(dataSet3_on_feature3[['user_id', 'action','date']])
+    t8 = t8[(t8['action'].notnull() == True) & (t8['action'] == 2)&(t8['date'].isnull()==True)]
+    t8 = pd.DataFrame(t8['user_id'], columns=['user_id'])
+    t8['user_online_notUseReceive_coupon'] = 1
+    t8 = t8.groupby('user_id', sort=False).agg('sum').reset_index()
+
+    # 每个用户没有使用消费券消费的次数user_online_notUse_coupon
+    t9 = pd.DataFrame(dataSet3_on_feature3[['user_id', 'coupon_id', 'date']])
+    t9 = t9[(t9['date'].notnull() == True) & (t9['coupon_id'].isnull() == True)]
+    t9 = pd.DataFrame(t9['user_id'], columns=['user_id'])
+    t9['user_online_notUse_coupon'] = 1
+    t9 = t9.groupby('user_id', sort=False).agg('sum').reset_index()
+
+    # 合并数据
+    left = dataSet3_on_feature3[['user_id']].drop_duplicates()
+    dataSet3_on_result = pd.merge(left,t,how='left',on=['user_id'])
+    dataSet3_on_result = pd.merge(dataSet3_on_result,t1,how='left',on='user_id')
+    dataSet3_on_result = pd.merge(dataSet3_on_result,t2,how='left',on='user_id')
+    dataSet3_on_result = pd.merge(dataSet3_on_result,t3,how='left',on='user_id')
+    dataSet3_on_result = pd.merge(dataSet3_on_result,t4,how='left',on='user_id')
+    dataSet3_on_result = pd.merge(dataSet3_on_result,t5,how='left',on='user_id')
+    dataSet3_on_result = pd.merge(dataSet3_on_result,t6,how='left',on='user_id')
+    dataSet3_on_result = pd.merge(dataSet3_on_result,t7,how='left',on='user_id')
+    dataSet3_on_result = pd.merge(dataSet3_on_result,t8,how='left',on='user_id')
+    dataSet3_on_result = pd.merge(dataSet3_on_result,t9,how='left',on='user_id')
+
+    # 替换每列中的Nan,用平均值来代替
+    for i in dataSet3_on_result.columns:
+        meanVal = dataSet3_on_result[i].mean()
+        dataSet3_on_result[i].fillna(meanVal,inplace=True)
+
+    # 使用消费券消费的次数占总消费次数的占比 user_online_buy_couponRate (use_online_buy_coupon/user_online_buy_total)
+    t10 = dataSet3_on_result['use_online_buy_coupon']
+    t_10 = dataSet3_on_result['user_online_buy_total']
+    t10 = t10/t_10
+    dataSet3_on_result['user_online_buy_couponRate'] = t10
+
+    # 用户使用消费券占领取的消费券的比重  uses_online_coupon_buyRate (use_online_buy_coupon/user_online_coupon_receivedAll)
+    t11 = dataSet3_on_result['use_online_buy_coupon']
+    t_11 = dataSet3_on_result['user_online_coupon_receivedAll']
+    t11 = t11/t_11
+    dataSet3_on_result['uses_online_coupon_buyRate'] = t11
+
+    # 每个用户限时低价消费占总消费的比重 user_online_buy_fixedRate (user_online_buy_fixed/user_online_buy_total)
+    t12 = dataSet3_on_result['user_online_buy_fixed']
+    t_12 = dataSet3_on_result['user_online_buy_total']
+    t12 = t12/t_12
+    dataSet3_on_result['user_online_buy_fixedRate'] = t12
+
+    # 消费的商店占有过行为的商店的比重 user_online_merchantBuyRate (user_online_buy_merchantCount/user_online_action_merchantCount)
+    t13 = dataSet3_on_result['user_online_buy_merchantCount']
+    t_13 = dataSet3_on_result['user_online_action_merchantCount']
+    t13 = t13/t_13
+    dataSet3_on_result['user_online_merchantBuyRate'] = t13
+
+    dataSet3_on_result.to_csv('dataSet3_on_feature.csv', index=None)
+
     # # 对dataSet2_on_feature2
     #
     # # 每个用户消费的总次数user_online_buy_total
@@ -1211,13 +1226,7 @@ if __name__ == '__main__':
     # t8 = pd.DataFrame(t8[['merchant_id', 'merchant_coupon_avgPrice']],columns=['merchant_id', 'merchant_coupon_avgPrice'])
     #
     # # 商家满减优惠券的使用次数 merchant_manjian_useCount
-    def classify(s): # 直接优惠记为0，满减记为1
-        s = str(s)
-        s = s.split(':')
-        if len(s) == 1:
-            return 0
-        else:
-            return 1
+
     #
     #
     # t9 = pd.DataFrame(dataSet1_off_feature1[['merchant_id', 'coupon_id', 'discount_rate', 'date']])
@@ -1612,217 +1621,428 @@ if __name__ == '__main__':
     # dataSet3
     # 每个用户在每个商家消费的次数 user-merchant_use_count
 
-    t = pd.DataFrame(dataSet3_off_feature3[['user_id','merchant_id', 'date']])
-    t = t[t['date'].notnull() == True]
-    t['date'] = 1
-    t = t.groupby(['user_id','merchant_id'], sort=False).agg('sum').reset_index()
-    t.rename(columns={'date': 'user-merchant_use_count'}, inplace=True)
+    # t = pd.DataFrame(dataSet3_off_feature3[['user_id','merchant_id', 'date']])
+    # t = t[t['date'].notnull() == True]
+    # t['date'] = 1
+    # t = t.groupby(['user_id','merchant_id'], sort=False).agg('sum').reset_index()
+    # t.rename(columns={'date': 'user-merchant_use_count'}, inplace=True)
+    #
+    # # 每个用户领取的每个商家的优惠券的次数 user_merchant_receiveCoupon_count
+    # t1 = pd.DataFrame(dataSet3_off_feature3[['user_id', 'merchant_id', 'date_received']])
+    # t1 = t1[t1['date_received'].notnull() == True]
+    # t1['date_received'] = 1
+    # t1 = t1.groupby(['user_id', 'merchant_id'], sort=False).agg('sum').reset_index()
+    # t1.rename(columns={'date_received': 'user_merchant_receiveCoupon_count'}, inplace=True)
+    #
+    # # 每个用户领取了商家的优惠券后使用的次数 user_merchant_useCoupon_count
+    # t2 = pd.DataFrame(dataSet3_off_feature3[['user_id', 'merchant_id', 'date_received','date']])
+    # t2 = t2[(t2['date_received'].notnull() == True) & (t2['date'].notnull() == True)]
+    # t2['user_merchant_useCoupon_count'] = 1
+    # t2 = t2.groupby(['user_id', 'merchant_id'], sort=False).agg('sum').reset_index()
+    # t2 = pd.DataFrame(t2[['user_id','merchant_id','user_merchant_useCoupon_count']],columns=['user_id','merchant_id','user_merchant_useCoupon_count'])
+    #
+    # # 用户不领取消费券直接消费的次数 user_merchant_notCoupon_count
+    # t3 = pd.DataFrame(dataSet3_off_feature3[['user_id', 'merchant_id', 'date_received','date']])
+    # t3 = t3[(t3['date_received'].notnull() == False) & (t3['date'].notnull() == True)]
+    # t3['user_merchant_notCoupon_count'] = 1
+    # t3 = t3.groupby(['user_id', 'merchant_id'], sort=False).agg('sum').reset_index()
+    # t3 = pd.DataFrame(t3[['user_id','merchant_id','user_merchant_notCoupon_count']],columns=['user_id','merchant_id','user_merchant_notCoupon_count'])
+    #
+    # # 每个用户平均核销每个商家几张消费券 user_merchant_avgCoupon
+    # t4 = pd.DataFrame(dataSet3_off_feature3[['user_id', 'merchant_id', 'date_received','date']])
+    # t4 = t4[(t4['date_received'].notnull() == True) & (t4['date'].notnull() == True)]
+    # t4['user_merchant_avgCoupon'] = 1
+    # t4 = t4.groupby(['user_id','merchant_id'],sort=False).agg('mean').reset_index()
+    # t4 = pd.DataFrame(t4[['user_id', 'merchant_id', 'user_merchant_avgCoupon']],
+    #                   columns=['user_id', 'merchant_id', 'user_merchant_avgCoupon'])
+    #
+    # # 每个用户对于商家的消费券的使用间隔 user_merchant_avgDay
+    # t5 = pd.DataFrame(dataSet3_off_feature3[['user_id', 'merchant_id', 'date_received', 'date']])
+    # t5 = t5[(t5['date_received'].notnull() == True) & (t5['date'].notnull() == True)]
+    # t5['user_merchant_avgDay'] = t5['date'].apply(int) - t5['date_received'].apply(int)
+    # t5 = t5.groupby(['user_id','merchant_id'],sort=False).agg('mean').reset_index()
+    # t5 = pd.DataFrame(t5[['user_id','merchant_id','user_merchant_avgDay']],columns=['user_id','merchant_id','user_merchant_avgDay'])
+    #
+    # # 每个用户对于商家的核销率 user_merchant_useRate (user_merchant_useCoupon_count/user_merchant_receiveCoupon_count)
+    # t6 = pd.merge(t1,t2,how='left',on=['user_id','merchant_id'])
+    # t6 = t6.fillna(0)
+    # t6['user_merchant_useRate'] = t6['user_merchant_useCoupon_count']/t6['user_merchant_receiveCoupon_count']
+    # t6 = pd.DataFrame(t6[['user_id','merchant_id','user_merchant_useRate']],columns=['user_id','merchant_id','user_merchant_useRate'])
+    #
+    # # 合并数据
+    # left = dataSet3_off_feature3[['user_id','merchant_id']].drop_duplicates()
+    # dataSet3_off_userMerchant_feature3 = pd.merge(left,t,how='left',on=['user_id','merchant_id'])
+    # dataSet3_off_userMerchant_feature3 = pd.merge(dataSet3_off_userMerchant_feature3, t1, how='left', on=['user_id', 'merchant_id'])
+    # dataSet3_off_userMerchant_feature3 = pd.merge(dataSet3_off_userMerchant_feature3, t2, how='left',
+    #                                               on=['user_id', 'merchant_id'])
+    # dataSet3_off_userMerchant_feature3 = pd.merge(dataSet3_off_userMerchant_feature3, t3, how='left',
+    #                                               on=['user_id', 'merchant_id'])
+    # dataSet3_off_userMerchant_feature3 = pd.merge(dataSet3_off_userMerchant_feature3, t4, how='left',
+    #                                               on=['user_id', 'merchant_id'])
+    # dataSet3_off_userMerchant_feature3 = pd.merge(dataSet3_off_userMerchant_feature3, t5, how='left',
+    #                                               on=['user_id', 'merchant_id'])
+    # dataSet3_off_userMerchant_feature3 = pd.merge(dataSet3_off_userMerchant_feature3, t6, how='left',
+    #                                               on=['user_id', 'merchant_id'])
+    # dataSet3_off_userMerchant_feature3 = dataSet3_off_userMerchant_feature3.fillna(0)
+    # print(dataSet3_off_userMerchant_feature3.columns)
+    # dataSet3_off_userMerchant_feature3.to_csv('dataSet3_off_userMerchant_feature3.csv', index=None)
+    #
+    # # dataSet2
+    # t = pd.DataFrame(dataSet2_off_feature2[['user_id', 'merchant_id', 'date']])
+    # t = t[t['date'].notnull() == True]
+    # t['date'] = 1
+    # t = t.groupby(['user_id', 'merchant_id'], sort=False).agg('sum').reset_index()
+    # t.rename(columns={'date': 'user-merchant_use_count'}, inplace=True)
+    #
+    # # 每个用户领取的每个商家的优惠券的次数 user_merchant_receiveCoupon_count
+    # t1 = pd.DataFrame(dataSet2_off_feature2[['user_id', 'merchant_id', 'date_received']])
+    # t1 = t1[t1['date_received'].notnull() == True]
+    # t1['date_received'] = 1
+    # t1 = t1.groupby(['user_id', 'merchant_id'], sort=False).agg('sum').reset_index()
+    # t1.rename(columns={'date_received': 'user_merchant_receiveCoupon_count'}, inplace=True)
+    #
+    # # 每个用户领取了商家的优惠券后使用的次数 user_merchant_useCoupon_count
+    # t2 = pd.DataFrame(dataSet2_off_feature2[['user_id', 'merchant_id', 'date_received', 'date']])
+    # t2 = t2[(t2['date_received'].notnull() == True) & (t2['date'].notnull() == True)]
+    # t2['user_merchant_useCoupon_count'] = 1
+    # t2 = t2.groupby(['user_id', 'merchant_id'], sort=False).agg('sum').reset_index()
+    # t2 = pd.DataFrame(t2[['user_id', 'merchant_id', 'user_merchant_useCoupon_count']],
+    #                   columns=['user_id', 'merchant_id', 'user_merchant_useCoupon_count'])
+    #
+    # # 用户不领取消费券直接消费的次数 user_merchant_notCoupon_count
+    # t3 = pd.DataFrame(dataSet2_off_feature2[['user_id', 'merchant_id', 'date_received', 'date']])
+    # t3 = t3[(t3['date_received'].notnull() == False) & (t3['date'].notnull() == True)]
+    # t3['user_merchant_notCoupon_count'] = 1
+    # t3 = t3.groupby(['user_id', 'merchant_id'], sort=False).agg('sum').reset_index()
+    # t3 = pd.DataFrame(t3[['user_id', 'merchant_id', 'user_merchant_notCoupon_count']],
+    #                   columns=['user_id', 'merchant_id', 'user_merchant_notCoupon_count'])
+    #
+    # # 每个用户平均核销每个商家几张消费券 user_merchant_avgCoupon
+    # t4 = pd.DataFrame(dataSet2_off_feature2[['user_id', 'merchant_id', 'date_received', 'date']])
+    # t4 = t4[(t4['date_received'].notnull() == True) & (t4['date'].notnull() == True)]
+    # t4['user_merchant_avgCoupon'] = 1
+    # t4 = t4.groupby(['user_id', 'merchant_id'], sort=False).agg('mean').reset_index()
+    # t4 = pd.DataFrame(t4[['user_id', 'merchant_id', 'user_merchant_avgCoupon']],
+    #                   columns=['user_id', 'merchant_id', 'user_merchant_avgCoupon'])
+    #
+    # # 每个用户对于商家的消费券的使用间隔 user_merchant_avgDay
+    # t5 = pd.DataFrame(dataSet2_off_feature2[['user_id', 'merchant_id', 'date_received', 'date']])
+    # t5 = t5[(t5['date_received'].notnull() == True) & (t5['date'].notnull() == True)]
+    # t5['user_merchant_avgDay'] = t5['date'].apply(int) - t5['date_received'].apply(int)
+    # t5 = t5.groupby(['user_id', 'merchant_id'], sort=False).agg('mean').reset_index()
+    # t5 = pd.DataFrame(t5[['user_id', 'merchant_id', 'user_merchant_avgDay']],
+    #                   columns=['user_id', 'merchant_id', 'user_merchant_avgDay'])
+    #
+    # # 每个用户对于商家的核销率 user_merchant_useRate (user_merchant_useCoupon_count/user_merchant_receiveCoupon_count)
+    # t6 = pd.merge(t1, t2, how='left', on=['user_id', 'merchant_id'])
+    # t6 = t6.fillna(0)
+    # t6['user_merchant_useRate'] = t6['user_merchant_useCoupon_count'] / t6['user_merchant_receiveCoupon_count']
+    # t6 = pd.DataFrame(t6[['user_id', 'merchant_id', 'user_merchant_useRate']],
+    #                   columns=['user_id', 'merchant_id', 'user_merchant_useRate'])
+    #
+    # # 合并数据
+    # left = dataSet2_off_feature2[['user_id', 'merchant_id']].drop_duplicates()
+    # dataSet2_off_userMerchant_feature2 = pd.merge(left, t, how='left', on=['user_id', 'merchant_id'])
+    # dataSet2_off_userMerchant_feature2 = pd.merge(dataSet2_off_userMerchant_feature2, t1, how='left',
+    #                                               on=['user_id', 'merchant_id'])
+    # dataSet2_off_userMerchant_feature2 = pd.merge(dataSet2_off_userMerchant_feature2, t2, how='left',
+    #                                               on=['user_id', 'merchant_id'])
+    # dataSet2_off_userMerchant_feature2 = pd.merge(dataSet2_off_userMerchant_feature2, t3, how='left',
+    #                                               on=['user_id', 'merchant_id'])
+    # dataSet2_off_userMerchant_feature2 = pd.merge(dataSet2_off_userMerchant_feature2, t4, how='left',
+    #                                               on=['user_id', 'merchant_id'])
+    # dataSet2_off_userMerchant_feature2 = pd.merge(dataSet2_off_userMerchant_feature2, t5, how='left',
+    #                                               on=['user_id', 'merchant_id'])
+    # dataSet2_off_userMerchant_feature2 = pd.merge(dataSet2_off_userMerchant_feature2, t6, how='left',
+    #                                               on=['user_id', 'merchant_id'])
+    # dataSet2_off_userMerchant_feature2 = dataSet2_off_userMerchant_feature2.fillna(0)
+    # print(dataSet2_off_userMerchant_feature2.columns)
+    # dataSet2_off_userMerchant_feature2.to_csv('dataSet2_off_userMerchant_feature2.csv', index=None)
+    #
+    # # dataSet1
+    # t = pd.DataFrame(dataSet1_off_feature1[['user_id', 'merchant_id', 'date']])
+    # t = t[t['date'].notnull() == True]
+    # t['date'] = 1
+    # t = t.groupby(['user_id', 'merchant_id'], sort=False).agg('sum').reset_index()
+    # t.rename(columns={'date': 'user-merchant_use_count'}, inplace=True)
+    #
+    # # 每个用户领取的每个商家的优惠券的次数 user_merchant_receiveCoupon_count
+    # t1 = pd.DataFrame(dataSet1_off_feature1[['user_id', 'merchant_id', 'date_received']])
+    # t1 = t1[t1['date_received'].notnull() == True]
+    # t1['date_received'] = 1
+    # t1 = t1.groupby(['user_id', 'merchant_id'], sort=False).agg('sum').reset_index()
+    # t1.rename(columns={'date_received': 'user_merchant_receiveCoupon_count'}, inplace=True)
+    #
+    # # 每个用户领取了商家的优惠券后使用的次数 user_merchant_useCoupon_count
+    # t2 = pd.DataFrame(dataSet1_off_feature1[['user_id', 'merchant_id', 'date_received', 'date']])
+    # t2 = t2[(t2['date_received'].notnull() == True) & (t2['date'].notnull() == True)]
+    # t2['user_merchant_useCoupon_count'] = 1
+    # t2 = t2.groupby(['user_id', 'merchant_id'], sort=False).agg('sum').reset_index()
+    # t2 = pd.DataFrame(t2[['user_id', 'merchant_id', 'user_merchant_useCoupon_count']],
+    #                   columns=['user_id', 'merchant_id', 'user_merchant_useCoupon_count'])
+    #
+    # # 用户不领取消费券直接消费的次数 user_merchant_notCoupon_count
+    # t3 = pd.DataFrame(dataSet1_off_feature1[['user_id', 'merchant_id', 'date_received', 'date']])
+    # t3 = t3[(t3['date_received'].notnull() == False) & (t3['date'].notnull() == True)]
+    # t3['user_merchant_notCoupon_count'] = 1
+    # t3 = t3.groupby(['user_id', 'merchant_id'], sort=False).agg('sum').reset_index()
+    # t3 = pd.DataFrame(t3[['user_id', 'merchant_id', 'user_merchant_notCoupon_count']],
+    #                   columns=['user_id', 'merchant_id', 'user_merchant_notCoupon_count'])
+    #
+    # # 每个用户平均核销每个商家几张消费券 user_merchant_avgCoupon
+    # t4 = pd.DataFrame(dataSet1_off_feature1[['user_id', 'merchant_id', 'date_received', 'date']])
+    # t4 = t4[(t4['date_received'].notnull() == True) & (t4['date'].notnull() == True)]
+    # t4['user_merchant_avgCoupon'] = 1
+    # t4 = t4.groupby(['user_id', 'merchant_id'], sort=False).agg('mean').reset_index()
+    # t4 = pd.DataFrame(t4[['user_id', 'merchant_id', 'user_merchant_avgCoupon']],
+    #                   columns=['user_id', 'merchant_id', 'user_merchant_avgCoupon'])
+    #
+    # # 每个用户对于商家的消费券的使用间隔 user_merchant_avgDay
+    # t5 = pd.DataFrame(dataSet1_off_feature1[['user_id', 'merchant_id', 'date_received', 'date']])
+    # t5 = t5[(t5['date_received'].notnull() == True) & (t5['date'].notnull() == True)]
+    # t5['user_merchant_avgDay'] = t5['date'].apply(int) - t5['date_received'].apply(int)
+    # t5 = t5.groupby(['user_id', 'merchant_id'], sort=False).agg('mean').reset_index()
+    # t5 = pd.DataFrame(t5[['user_id', 'merchant_id', 'user_merchant_avgDay']],
+    #                   columns=['user_id', 'merchant_id', 'user_merchant_avgDay'])
+    #
+    # # 每个用户对于商家的核销率 user_merchant_useRate (user_merchant_useCoupon_count/user_merchant_receiveCoupon_count)
+    # t6 = pd.merge(t1, t2, how='left', on=['user_id', 'merchant_id'])
+    # t6 = t6.fillna(0)
+    # t6['user_merchant_useRate'] = t6['user_merchant_useCoupon_count'] / t6['user_merchant_receiveCoupon_count']
+    # t6 = pd.DataFrame(t6[['user_id', 'merchant_id', 'user_merchant_useRate']],
+    #                   columns=['user_id', 'merchant_id', 'user_merchant_useRate'])
+    #
+    # # 合并数据
+    # left = dataSet1_off_feature1[['user_id', 'merchant_id']].drop_duplicates()
+    # dataSet1_off_userMerchant_feature1 = pd.merge(left, t, how='left', on=['user_id', 'merchant_id'])
+    # dataSet1_off_userMerchant_feature1 = pd.merge(dataSet1_off_userMerchant_feature1, t1, how='left',
+    #                                               on=['user_id', 'merchant_id'])
+    # dataSet1_off_userMerchant_feature1 = pd.merge(dataSet1_off_userMerchant_feature1, t2, how='left',
+    #                                               on=['user_id', 'merchant_id'])
+    # dataSet1_off_userMerchant_feature1 = pd.merge(dataSet1_off_userMerchant_feature1, t3, how='left',
+    #                                               on=['user_id', 'merchant_id'])
+    # dataSet1_off_userMerchant_feature1 = pd.merge(dataSet1_off_userMerchant_feature1, t4, how='left',
+    #                                               on=['user_id', 'merchant_id'])
+    # dataSet1_off_userMerchant_feature1 = pd.merge(dataSet1_off_userMerchant_feature1, t5, how='left',
+    #                                               on=['user_id', 'merchant_id'])
+    # dataSet1_off_userMerchant_feature1 = pd.merge(dataSet1_off_userMerchant_feature1, t6, how='left',
+    #                                               on=['user_id', 'merchant_id'])
+    # dataSet1_off_userMerchant_feature1 = dataSet1_off_userMerchant_feature1.fillna(0)
+    # print(dataSet1_off_userMerchant_feature1.columns)
+    # dataSet1_off_userMerchant_feature1.to_csv('dataSet1_off_userMerchant_feature1.csv', index=None)
 
-    # 每个用户领取的每个商家的优惠券的次数 user_merchant_receiveCoupon_count
-    t1 = pd.DataFrame(dataSet3_off_feature3[['user_id', 'merchant_id', 'date_received']])
-    t1 = t1[t1['date_received'].notnull() == True]
-    t1['date_received'] = 1
-    t1 = t1.groupby(['user_id', 'merchant_id'], sort=False).agg('sum').reset_index()
-    t1.rename(columns={'date_received': 'user_merchant_receiveCoupon_count'}, inplace=True)
 
-    # 每个用户领取了商家的优惠券后使用的次数 user_merchant_useCoupon_count
-    t2 = pd.DataFrame(dataSet3_off_feature3[['user_id', 'merchant_id', 'date_received','date']])
-    t2 = t2[(t2['date_received'].notnull() == True) & (t2['date'].notnull() == True)]
-    t2['user_merchant_useCoupon_count'] = 1
-    t2 = t2.groupby(['user_id', 'merchant_id'], sort=False).agg('sum').reset_index()
-    t2 = pd.DataFrame(t2[['user_id','merchant_id','user_merchant_useCoupon_count']],columns=['user_id','merchant_id','user_merchant_useCoupon_count'])
 
-    # 用户不领取消费券直接消费的次数 user_merchant_notCoupon_count
-    t3 = pd.DataFrame(dataSet3_off_feature3[['user_id', 'merchant_id', 'date_received','date']])
-    t3 = t3[(t3['date_received'].notnull() == False) & (t3['date'].notnull() == True)]
-    t3['user_merchant_notCoupon_count'] = 1
-    t3 = t3.groupby(['user_id', 'merchant_id'], sort=False).agg('sum').reset_index()
-    t3 = pd.DataFrame(t3[['user_id','merchant_id','user_merchant_notCoupon_count']],columns=['user_id','merchant_id','user_merchant_notCoupon_count'])
+    """
+    从预测的样本中提取特征：
+        
+    """
+    # 用户当天领取的优惠券的数目 user_date_receiveCoupon
+    t = pd.DataFrame(dataSet3[['user_id', 'date_received']])
+    t = t[t['date_received'].notnull() == True]
+    t['user_date_receiveCoupon'] = 1
+    t = t.groupby(['user_id','date_received'], sort=False).agg('sum').reset_index()
 
-    # 每个用户平均核销每个商家几张消费券 user_merchant_avgCoupon
-    t4 = pd.DataFrame(dataSet3_off_feature3[['user_id', 'merchant_id', 'date_received','date']])
-    t4 = t4[(t4['date_received'].notnull() == True) & (t4['date'].notnull() == True)]
-    t4['user_merchant_avgCoupon'] = 1
-    t4 = t4.groupby(['user_id','merchant_id'],sort=False).agg('mean').reset_index()
-    t4 = pd.DataFrame(t4[['user_id', 'merchant_id', 'user_merchant_avgCoupon']],
-                      columns=['user_id', 'merchant_id', 'user_merchant_avgCoupon'])
+    # 用户当天领取的满减优惠券的数目 user_date_receiveManjian
+    t1 = pd.DataFrame(dataSet3[['user_id','discount_rate','date_received']])
+    t1['discount_rate'] = t1['discount_rate'].apply(classify)
+    t1 = t1[(t1['discount_rate']==1) & (t1['date_received'].notnull() == True)]
+    t1['user_date_receiveManjian'] = 1
+    t1 = t1.groupby(['user_id', 'date_received'], sort=False).agg('sum').reset_index()
+    t1 = pd.DataFrame(t1[['user_id', 'date_received', 'user_date_receiveManjian']],
+                      columns=['user_id', 'date_received', 'user_date_receiveManjian'])
 
-    # 每个用户对于商家的消费券的使用间隔 user_merchant_avgDay
-    t5 = pd.DataFrame(dataSet3_off_feature3[['user_id', 'merchant_id', 'date_received', 'date']])
-    t5 = t5[(t5['date_received'].notnull() == True) & (t5['date'].notnull() == True)]
-    t5['user_merchant_avgDay'] = t5['date'].apply(int) - t5['date_received'].apply(int)
-    t5 = t5.groupby(['user_id','merchant_id'],sort=False).agg('mean').reset_index()
-    t5 = pd.DataFrame(t5[['user_id','merchant_id','user_merchant_avgDay']],columns=['user_id','merchant_id','user_merchant_avgDay'])
+    # 用户当天领取的折扣优惠券的数目 user_date_receiveZhijie
+    t2 = pd.DataFrame(dataSet3[['user_id', 'discount_rate', 'date_received']])
+    t2['discount_rate'] = t2['discount_rate'].apply(classify)
+    t2 = t2[(t2['discount_rate'] == 0) & (t2['date_received'].notnull() == True)]
+    t2['user_date_receiveZhijie'] = 1
+    t2 = t2.groupby(['user_id', 'date_received'], sort=False).agg('sum').reset_index()
+    t2 = pd.DataFrame(t2[['user_id', 'date_received', 'user_date_receiveZhijie']],
+                      columns=['user_id', 'date_received', 'user_date_receiveZhijie'])
 
-    # 每个用户对于商家的核销率 user_merchant_useRate (user_merchant_useCoupon_count/user_merchant_receiveCoupon_count)
-    t6 = pd.merge(t1,t2,how='left',on=['user_id','merchant_id'])
-    t6 = t6.fillna(0)
-    t6['user_merchant_useRate'] = t6['user_merchant_useCoupon_count']/t6['user_merchant_receiveCoupon_count']
-    t6 = pd.DataFrame(t6[['user_id','merchant_id','user_merchant_useRate']],columns=['user_id','merchant_id','user_merchant_useRate'])
+    # 是否是第一次领取优惠券 is_first
+    t3 = pd.DataFrame(dataSet3[['user_id', 'coupon_id', 'date_received']])
+    t3['date_received'] = t3['date_received'].apply(str)
+    t3 = t3[t3['date_received'].notnull() == True]
+    t3 = t3.groupby(['user_id', 'coupon_id'])['date_received'].agg(lambda x: ':'.join(x)).reset_index()
+    # t3['receive_number'] = t3['date_received'].apply(lambda s: len(s.split(':')))
+    # t3 = t3[t3['receive_number'] > 1]
+    t3['max_receive_date'] = t3['date_received'].apply(lambda x: max([int(d) for d in x.split(':')]))
+    t3['min_receive_date'] = t3['date_received'].apply(lambda x: min([int(d) for d in x.split(':')]))
+    t3 = pd.DataFrame(t3[['user_id','coupon_id','max_receive_date','min_receive_date']])
+    t3_1 = dataSet3[['user_id', 'coupon_id', 'date_received']]
+    t3_1 = pd.merge(t3_1, t3, on=['user_id', 'coupon_id'], how='left')
+    t3_1['user_receive_lastone'] = t3_1['max_receive_date'] - t3_1['date_received'].apply(int)
+    t3_1['user_receive_firstone'] = t3_1['date_received'] - t3_1['min_receive_date'].apply(int)
+    t3_1['is_first'] = t3_1['user_receive_firstone'].apply(is_firstorlast)
+    t3_1['is_last'] = t3_1['user_receive_lastone'].apply(is_firstorlast)
+    t3 = pd.DataFrame(t3_1[['user_id','coupon_id','is_first','is_last']])
+
+    # 用户领取了优惠券的商家的个数 user_coupon_merchant
+    t4 = pd.DataFrame(dataSet3[['user_id', 'merchant_id', 'date_received']])
+    t4 = t4[(t4['date_received'].notnull() == True)]
+    t4['user_coupon_merchant'] = 1
+    t4 = pd.DataFrame(t4[['user_id', 'merchant_id', 'user_coupon_merchant']]).drop_duplicates()
+    t4 = t4.groupby(['user_id'], sort=False).agg('sum').reset_index()
+    t4 = pd.DataFrame(t4[['user_id', 'user_coupon_merchant']],
+                      columns=['user_id', 'user_coupon_merchant'])
+
+    # 用户领取优惠券是工作日还是周末 user_coupon_isWeek
+    t5 = pd.DataFrame(dataSet3[['user_id', 'coupon_id', 'date_received']])
+    t5 = t5[(t5['date_received'].notnull() == True)]
+    t5['user_coupon_isWeek'] = t5['date_received'].apply(int).apply(isweek)
+    t5 = pd.DataFrame(t5[['user_id', 'coupon_id','user_coupon_isWeek']],
+                      columns=['user_id', 'coupon_id','user_coupon_isWeek'])
 
     # 合并数据
-    left = dataSet3_off_feature3[['user_id','merchant_id']].drop_duplicates()
-    dataSet3_off_userMerchant_feature3 = pd.merge(left,t,how='left',on=['user_id','merchant_id'])
-    dataSet3_off_userMerchant_feature3 = pd.merge(dataSet3_off_userMerchant_feature3, t1, how='left', on=['user_id', 'merchant_id'])
-    dataSet3_off_userMerchant_feature3 = pd.merge(dataSet3_off_userMerchant_feature3, t2, how='left',
-                                                  on=['user_id', 'merchant_id'])
-    dataSet3_off_userMerchant_feature3 = pd.merge(dataSet3_off_userMerchant_feature3, t3, how='left',
-                                                  on=['user_id', 'merchant_id'])
-    dataSet3_off_userMerchant_feature3 = pd.merge(dataSet3_off_userMerchant_feature3, t4, how='left',
-                                                  on=['user_id', 'merchant_id'])
-    dataSet3_off_userMerchant_feature3 = pd.merge(dataSet3_off_userMerchant_feature3, t5, how='left',
-                                                  on=['user_id', 'merchant_id'])
-    dataSet3_off_userMerchant_feature3 = pd.merge(dataSet3_off_userMerchant_feature3, t6, how='left',
-                                                  on=['user_id', 'merchant_id'])
-    dataSet3_off_userMerchant_feature3 = dataSet3_off_userMerchant_feature3.fillna(0)
-    print(dataSet3_off_userMerchant_feature3.columns)
-    dataSet3_off_userMerchant_feature3.to_csv('dataSet3_off_userMerchant_feature3.csv', index=None)
+    left = dataSet3
+    dataSet3_feature3 = pd.merge(left, t, how='left', on=['user_id', 'date_received'])
+    dataSet3_feature3 = pd.merge(dataSet3_feature3, t1, how='left',on=['user_id', 'date_received'])
+    dataSet3_feature3 = pd.merge(dataSet3_feature3, t2, how='left',on=['user_id', 'date_received'])
+    dataSet3_feature3 = pd.merge(dataSet3_feature3, t3, how='left',on=['user_id', 'coupon_id'])
+    dataSet3_feature3 = pd.merge(dataSet3_feature3, t4, how='left',on=['user_id'])
+    dataSet3_feature3 = pd.merge(dataSet3_feature3, t5, how='left',on=['user_id', 'coupon_id'])
+    dataSet3_feature3 = dataSet3_feature3.fillna(0)
+    dataSet3_feature3.to_csv('dataSet3_feature3.csv', index=None)
 
-    # dataSet2
-    t = pd.DataFrame(dataSet2_off_feature2[['user_id', 'merchant_id', 'date']])
-    t = t[t['date'].notnull() == True]
-    t['date'] = 1
-    t = t.groupby(['user_id', 'merchant_id'], sort=False).agg('sum').reset_index()
-    t.rename(columns={'date': 'user-merchant_use_count'}, inplace=True)
+    # 用户当天领取的优惠券的数目 user_date_receiveCoupon
+    t = pd.DataFrame(dataSet2[['user_id', 'date_received']])
+    t = t[t['date_received'].notnull() == True]
+    t['user_date_receiveCoupon'] = 1
+    t = t.groupby(['user_id', 'date_received'], sort=False).agg('sum').reset_index()
 
-    # 每个用户领取的每个商家的优惠券的次数 user_merchant_receiveCoupon_count
-    t1 = pd.DataFrame(dataSet2_off_feature2[['user_id', 'merchant_id', 'date_received']])
-    t1 = t1[t1['date_received'].notnull() == True]
-    t1['date_received'] = 1
-    t1 = t1.groupby(['user_id', 'merchant_id'], sort=False).agg('sum').reset_index()
-    t1.rename(columns={'date_received': 'user_merchant_receiveCoupon_count'}, inplace=True)
+    # 用户当天领取的满减优惠券的数目 user_date_receiveManjian
+    t1 = pd.DataFrame(dataSet2[['user_id', 'discount_rate', 'date_received']])
+    t1['discount_rate'] = t1['discount_rate'].apply(classify)
+    t1 = t1[(t1['discount_rate'] == 1) & (t1['date_received'].notnull() == True)]
+    t1['user_date_receiveManjian'] = 1
+    t1 = t1.groupby(['user_id', 'date_received'], sort=False).agg('sum').reset_index()
+    t1 = pd.DataFrame(t1[['user_id', 'date_received', 'user_date_receiveManjian']],
+                      columns=['user_id', 'date_received', 'user_date_receiveManjian'])
 
-    # 每个用户领取了商家的优惠券后使用的次数 user_merchant_useCoupon_count
-    t2 = pd.DataFrame(dataSet2_off_feature2[['user_id', 'merchant_id', 'date_received', 'date']])
-    t2 = t2[(t2['date_received'].notnull() == True) & (t2['date'].notnull() == True)]
-    t2['user_merchant_useCoupon_count'] = 1
-    t2 = t2.groupby(['user_id', 'merchant_id'], sort=False).agg('sum').reset_index()
-    t2 = pd.DataFrame(t2[['user_id', 'merchant_id', 'user_merchant_useCoupon_count']],
-                      columns=['user_id', 'merchant_id', 'user_merchant_useCoupon_count'])
+    # 用户当天领取的折扣优惠券的数目 user_date_receiveZhijie
+    t2 = pd.DataFrame(dataSet2[['user_id', 'discount_rate', 'date_received']])
+    t2['discount_rate'] = t2['discount_rate'].apply(classify)
+    t2 = t2[(t2['discount_rate'] == 0) & (t2['date_received'].notnull() == True)]
+    t2['user_date_receiveZhijie'] = 1
+    t2 = t2.groupby(['user_id', 'date_received'], sort=False).agg('sum').reset_index()
+    t2 = pd.DataFrame(t2[['user_id', 'date_received', 'user_date_receiveZhijie']],
+                      columns=['user_id', 'date_received', 'user_date_receiveZhijie'])
 
-    # 用户不领取消费券直接消费的次数 user_merchant_notCoupon_count
-    t3 = pd.DataFrame(dataSet2_off_feature2[['user_id', 'merchant_id', 'date_received', 'date']])
-    t3 = t3[(t3['date_received'].notnull() == False) & (t3['date'].notnull() == True)]
-    t3['user_merchant_notCoupon_count'] = 1
-    t3 = t3.groupby(['user_id', 'merchant_id'], sort=False).agg('sum').reset_index()
-    t3 = pd.DataFrame(t3[['user_id', 'merchant_id', 'user_merchant_notCoupon_count']],
-                      columns=['user_id', 'merchant_id', 'user_merchant_notCoupon_count'])
+    # 是否是第一次领取优惠券 is_first
+    t3 = pd.DataFrame(dataSet2[['user_id', 'coupon_id', 'date_received']])
+    t3['date_received'] = t3['date_received'].apply(int).apply(str)
+    t3 = t3[t3['date_received'].notnull() == True]
+    t3 = t3.groupby(['user_id', 'coupon_id'])['date_received'].agg(lambda x: ':'.join(x)).reset_index()
+    # t3['receive_number'] = t3['date_received'].apply(lambda s: len(s.split(':')))
+    # t3 = t3[t3['receive_number'] > 1]
+    t3['max_receive_date'] = t3['date_received'].apply(lambda x: max([int(d) for d in x.split(':')]))
+    t3['min_receive_date'] = t3['date_received'].apply(lambda x: min([int(d) for d in x.split(':')]))
+    t3 = pd.DataFrame(t3[['user_id', 'coupon_id', 'max_receive_date', 'min_receive_date']])
+    t3_1 = dataSet2[['user_id', 'coupon_id', 'date_received']]
+    t3_1 = pd.merge(t3_1, t3, on=['user_id', 'coupon_id'], how='left')
+    t3_1['user_receive_lastone'] = t3_1['max_receive_date'] - t3_1['date_received'].apply(int)
+    t3_1['user_receive_firstone'] = t3_1['date_received'] - t3_1['min_receive_date'].apply(int)
+    t3_1['is_first'] = t3_1['user_receive_firstone'].apply(is_firstorlast)
+    t3_1['is_last'] = t3_1['user_receive_lastone'].apply(is_firstorlast)
+    t3 = pd.DataFrame(t3_1[['user_id', 'coupon_id', 'is_first', 'is_last']])
 
-    # 每个用户平均核销每个商家几张消费券 user_merchant_avgCoupon
-    t4 = pd.DataFrame(dataSet2_off_feature2[['user_id', 'merchant_id', 'date_received', 'date']])
-    t4 = t4[(t4['date_received'].notnull() == True) & (t4['date'].notnull() == True)]
-    t4['user_merchant_avgCoupon'] = 1
-    t4 = t4.groupby(['user_id', 'merchant_id'], sort=False).agg('mean').reset_index()
-    t4 = pd.DataFrame(t4[['user_id', 'merchant_id', 'user_merchant_avgCoupon']],
-                      columns=['user_id', 'merchant_id', 'user_merchant_avgCoupon'])
+    # 用户领取了优惠券的商家的个数 user_coupon_merchant
+    t4 = pd.DataFrame(dataSet2[['user_id', 'merchant_id', 'date_received']])
+    t4 = t4[(t4['date_received'].notnull() == True)]
+    t4['user_coupon_merchant'] = 1
+    t4 = pd.DataFrame(t4[['user_id', 'merchant_id', 'user_coupon_merchant']]).drop_duplicates()
+    t4 = t4.groupby(['user_id'], sort=False).agg('sum').reset_index()
+    t4 = pd.DataFrame(t4[['user_id', 'user_coupon_merchant']],
+                      columns=['user_id', 'user_coupon_merchant'])
 
-    # 每个用户对于商家的消费券的使用间隔 user_merchant_avgDay
-    t5 = pd.DataFrame(dataSet2_off_feature2[['user_id', 'merchant_id', 'date_received', 'date']])
-    t5 = t5[(t5['date_received'].notnull() == True) & (t5['date'].notnull() == True)]
-    t5['user_merchant_avgDay'] = t5['date'].apply(int) - t5['date_received'].apply(int)
-    t5 = t5.groupby(['user_id', 'merchant_id'], sort=False).agg('mean').reset_index()
-    t5 = pd.DataFrame(t5[['user_id', 'merchant_id', 'user_merchant_avgDay']],
-                      columns=['user_id', 'merchant_id', 'user_merchant_avgDay'])
-
-    # 每个用户对于商家的核销率 user_merchant_useRate (user_merchant_useCoupon_count/user_merchant_receiveCoupon_count)
-    t6 = pd.merge(t1, t2, how='left', on=['user_id', 'merchant_id'])
-    t6 = t6.fillna(0)
-    t6['user_merchant_useRate'] = t6['user_merchant_useCoupon_count'] / t6['user_merchant_receiveCoupon_count']
-    t6 = pd.DataFrame(t6[['user_id', 'merchant_id', 'user_merchant_useRate']],
-                      columns=['user_id', 'merchant_id', 'user_merchant_useRate'])
+    # 用户领取优惠券是工作日还是周末 user_coupon_isWeek
+    t5 = pd.DataFrame(dataSet2[['user_id', 'coupon_id', 'date_received']])
+    t5 = t5[(t5['date_received'].notnull() == True)]
+    t5['user_coupon_isWeek'] = t5['date_received'].apply(int).apply(isweek)
+    t5 = pd.DataFrame(t5[['user_id', 'coupon_id', 'user_coupon_isWeek']],
+                      columns=['user_id', 'coupon_id', 'user_coupon_isWeek'])
 
     # 合并数据
-    left = dataSet2_off_feature2[['user_id', 'merchant_id']].drop_duplicates()
-    dataSet2_off_userMerchant_feature2 = pd.merge(left, t, how='left', on=['user_id', 'merchant_id'])
-    dataSet2_off_userMerchant_feature2 = pd.merge(dataSet2_off_userMerchant_feature2, t1, how='left',
-                                                  on=['user_id', 'merchant_id'])
-    dataSet2_off_userMerchant_feature2 = pd.merge(dataSet2_off_userMerchant_feature2, t2, how='left',
-                                                  on=['user_id', 'merchant_id'])
-    dataSet2_off_userMerchant_feature2 = pd.merge(dataSet2_off_userMerchant_feature2, t3, how='left',
-                                                  on=['user_id', 'merchant_id'])
-    dataSet2_off_userMerchant_feature2 = pd.merge(dataSet2_off_userMerchant_feature2, t4, how='left',
-                                                  on=['user_id', 'merchant_id'])
-    dataSet2_off_userMerchant_feature2 = pd.merge(dataSet2_off_userMerchant_feature2, t5, how='left',
-                                                  on=['user_id', 'merchant_id'])
-    dataSet2_off_userMerchant_feature2 = pd.merge(dataSet2_off_userMerchant_feature2, t6, how='left',
-                                                  on=['user_id', 'merchant_id'])
-    dataSet2_off_userMerchant_feature2 = dataSet2_off_userMerchant_feature2.fillna(0)
-    print(dataSet2_off_userMerchant_feature2.columns)
-    dataSet2_off_userMerchant_feature2.to_csv('dataSet2_off_userMerchant_feature2.csv', index=None)
+    left = dataSet2
+    dataSet2_feature3 = pd.merge(left, t, how='left', on=['user_id', 'date_received'])
+    dataSet2_feature3 = pd.merge(dataSet2_feature3, t1, how='left', on=['user_id', 'date_received'])
+    dataSet2_feature3 = pd.merge(dataSet2_feature3, t2, how='left', on=['user_id', 'date_received'])
+    dataSet2_feature3 = pd.merge(dataSet2_feature3, t3, how='left', on=['user_id', 'coupon_id'])
+    dataSet2_feature3 = pd.merge(dataSet2_feature3, t4, how='left', on=['user_id'])
+    dataSet2_feature3 = pd.merge(dataSet2_feature3, t5, how='left', on=['user_id', 'coupon_id'])
+    dataSet2_feature3 = dataSet2_feature3.fillna(0)
+    dataSet2_feature3.to_csv('dataSet2_feature3.csv', index=None)
 
-    # dataSet1
-    t = pd.DataFrame(dataSet1_off_feature1[['user_id', 'merchant_id', 'date']])
-    t = t[t['date'].notnull() == True]
-    t['date'] = 1
-    t = t.groupby(['user_id', 'merchant_id'], sort=False).agg('sum').reset_index()
-    t.rename(columns={'date': 'user-merchant_use_count'}, inplace=True)
+    # 用户当天领取的优惠券的数目 user_date_receiveCoupon
+    t = pd.DataFrame(dataSet1[['user_id', 'date_received']])
+    t = t[t['date_received'].notnull() == True]
+    t['user_date_receiveCoupon'] = 1
+    t = t.groupby(['user_id', 'date_received'], sort=False).agg('sum').reset_index()
 
-    # 每个用户领取的每个商家的优惠券的次数 user_merchant_receiveCoupon_count
-    t1 = pd.DataFrame(dataSet1_off_feature1[['user_id', 'merchant_id', 'date_received']])
-    t1 = t1[t1['date_received'].notnull() == True]
-    t1['date_received'] = 1
-    t1 = t1.groupby(['user_id', 'merchant_id'], sort=False).agg('sum').reset_index()
-    t1.rename(columns={'date_received': 'user_merchant_receiveCoupon_count'}, inplace=True)
+    # 用户当天领取的满减优惠券的数目 user_date_receiveManjian
+    t1 = pd.DataFrame(dataSet1[['user_id', 'discount_rate', 'date_received']])
+    t1['discount_rate'] = t1['discount_rate'].apply(classify)
+    t1 = t1[(t1['discount_rate'] == 1) & (t1['date_received'].notnull() == True)]
+    t1['user_date_receiveManjian'] = 1
+    t1 = t1.groupby(['user_id', 'date_received'], sort=False).agg('sum').reset_index()
+    t1 = pd.DataFrame(t1[['user_id', 'date_received', 'user_date_receiveManjian']],
+                      columns=['user_id', 'date_received', 'user_date_receiveManjian'])
 
-    # 每个用户领取了商家的优惠券后使用的次数 user_merchant_useCoupon_count
-    t2 = pd.DataFrame(dataSet1_off_feature1[['user_id', 'merchant_id', 'date_received', 'date']])
-    t2 = t2[(t2['date_received'].notnull() == True) & (t2['date'].notnull() == True)]
-    t2['user_merchant_useCoupon_count'] = 1
-    t2 = t2.groupby(['user_id', 'merchant_id'], sort=False).agg('sum').reset_index()
-    t2 = pd.DataFrame(t2[['user_id', 'merchant_id', 'user_merchant_useCoupon_count']],
-                      columns=['user_id', 'merchant_id', 'user_merchant_useCoupon_count'])
+    # 用户当天领取的折扣优惠券的数目 user_date_receiveZhijie
+    t2 = pd.DataFrame(dataSet1[['user_id', 'discount_rate', 'date_received']])
+    t2['discount_rate'] = t2['discount_rate'].apply(classify)
+    t2 = t2[(t2['discount_rate'] == 0) & (t2['date_received'].notnull() == True)]
+    t2['user_date_receiveZhijie'] = 1
+    t2 = t2.groupby(['user_id', 'date_received'], sort=False).agg('sum').reset_index()
+    t2 = pd.DataFrame(t2[['user_id', 'date_received', 'user_date_receiveZhijie']],
+                      columns=['user_id', 'date_received', 'user_date_receiveZhijie'])
 
-    # 用户不领取消费券直接消费的次数 user_merchant_notCoupon_count
-    t3 = pd.DataFrame(dataSet1_off_feature1[['user_id', 'merchant_id', 'date_received', 'date']])
-    t3 = t3[(t3['date_received'].notnull() == False) & (t3['date'].notnull() == True)]
-    t3['user_merchant_notCoupon_count'] = 1
-    t3 = t3.groupby(['user_id', 'merchant_id'], sort=False).agg('sum').reset_index()
-    t3 = pd.DataFrame(t3[['user_id', 'merchant_id', 'user_merchant_notCoupon_count']],
-                      columns=['user_id', 'merchant_id', 'user_merchant_notCoupon_count'])
+    # 是否是第一次领取优惠券 is_first
+    t3 = pd.DataFrame(dataSet1[['user_id', 'coupon_id', 'date_received']])
+    t3['date_received'] = t3['date_received'].apply(int).apply(str)
+    t3 = t3[t3['date_received'].notnull() == True]
+    t3 = t3.groupby(['user_id', 'coupon_id'])['date_received'].agg(lambda x: ':'.join(x)).reset_index()
+    # t3['receive_number'] = t3['date_received'].apply(lambda s: len(s.split(':')))
+    # t3 = t3[t3['receive_number'] > 1]
+    t3['max_receive_date'] = t3['date_received'].apply(lambda x: max([int(d) for d in x.split(':')]))
+    t3['min_receive_date'] = t3['date_received'].apply(lambda x: min([int(d) for d in x.split(':')]))
+    t3 = pd.DataFrame(t3[['user_id', 'coupon_id', 'max_receive_date', 'min_receive_date']])
+    t3_1 = dataSet1[['user_id', 'coupon_id', 'date_received']]
+    t3_1 = pd.merge(t3_1, t3, on=['user_id', 'coupon_id'], how='left')
+    t3_1['user_receive_lastone'] = t3_1['max_receive_date'] - t3_1['date_received'].apply(int)
+    t3_1['user_receive_firstone'] = t3_1['date_received'] - t3_1['min_receive_date'].apply(int)
+    t3_1['is_first'] = t3_1['user_receive_firstone'].apply(is_firstorlast)
+    t3_1['is_last'] = t3_1['user_receive_lastone'].apply(is_firstorlast)
+    t3 = pd.DataFrame(t3_1[['user_id', 'coupon_id', 'is_first', 'is_last']])
 
-    # 每个用户平均核销每个商家几张消费券 user_merchant_avgCoupon
-    t4 = pd.DataFrame(dataSet1_off_feature1[['user_id', 'merchant_id', 'date_received', 'date']])
-    t4 = t4[(t4['date_received'].notnull() == True) & (t4['date'].notnull() == True)]
-    t4['user_merchant_avgCoupon'] = 1
-    t4 = t4.groupby(['user_id', 'merchant_id'], sort=False).agg('mean').reset_index()
-    t4 = pd.DataFrame(t4[['user_id', 'merchant_id', 'user_merchant_avgCoupon']],
-                      columns=['user_id', 'merchant_id', 'user_merchant_avgCoupon'])
+    # 用户领取了优惠券的商家的个数 user_coupon_merchant
+    t4 = pd.DataFrame(dataSet1[['user_id', 'merchant_id', 'date_received']])
+    t4 = t4[(t4['date_received'].notnull() == True)]
+    t4['user_coupon_merchant'] = 1
+    t4 = pd.DataFrame(t4[['user_id', 'merchant_id', 'user_coupon_merchant']]).drop_duplicates()
+    t4 = t4.groupby(['user_id'], sort=False).agg('sum').reset_index()
+    t4 = pd.DataFrame(t4[['user_id', 'user_coupon_merchant']],
+                      columns=['user_id', 'user_coupon_merchant'])
 
-    # 每个用户对于商家的消费券的使用间隔 user_merchant_avgDay
-    t5 = pd.DataFrame(dataSet1_off_feature1[['user_id', 'merchant_id', 'date_received', 'date']])
-    t5 = t5[(t5['date_received'].notnull() == True) & (t5['date'].notnull() == True)]
-    t5['user_merchant_avgDay'] = t5['date'].apply(int) - t5['date_received'].apply(int)
-    t5 = t5.groupby(['user_id', 'merchant_id'], sort=False).agg('mean').reset_index()
-    t5 = pd.DataFrame(t5[['user_id', 'merchant_id', 'user_merchant_avgDay']],
-                      columns=['user_id', 'merchant_id', 'user_merchant_avgDay'])
-
-    # 每个用户对于商家的核销率 user_merchant_useRate (user_merchant_useCoupon_count/user_merchant_receiveCoupon_count)
-    t6 = pd.merge(t1, t2, how='left', on=['user_id', 'merchant_id'])
-    t6 = t6.fillna(0)
-    t6['user_merchant_useRate'] = t6['user_merchant_useCoupon_count'] / t6['user_merchant_receiveCoupon_count']
-    t6 = pd.DataFrame(t6[['user_id', 'merchant_id', 'user_merchant_useRate']],
-                      columns=['user_id', 'merchant_id', 'user_merchant_useRate'])
+    # 用户领取优惠券是工作日还是周末 user_coupon_isWeek
+    t5 = pd.DataFrame(dataSet1[['user_id', 'coupon_id', 'date_received']])
+    t5 = t5[(t5['date_received'].notnull() == True)]
+    t5['user_coupon_isWeek'] = t5['date_received'].apply(int).apply(isweek)
+    t5 = pd.DataFrame(t5[['user_id', 'coupon_id', 'user_coupon_isWeek']],
+                      columns=['user_id', 'coupon_id', 'user_coupon_isWeek'])
 
     # 合并数据
-    left = dataSet1_off_feature1[['user_id', 'merchant_id']].drop_duplicates()
-    dataSet1_off_userMerchant_feature1 = pd.merge(left, t, how='left', on=['user_id', 'merchant_id'])
-    dataSet1_off_userMerchant_feature1 = pd.merge(dataSet1_off_userMerchant_feature1, t1, how='left',
-                                                  on=['user_id', 'merchant_id'])
-    dataSet1_off_userMerchant_feature1 = pd.merge(dataSet1_off_userMerchant_feature1, t2, how='left',
-                                                  on=['user_id', 'merchant_id'])
-    dataSet1_off_userMerchant_feature1 = pd.merge(dataSet1_off_userMerchant_feature1, t3, how='left',
-                                                  on=['user_id', 'merchant_id'])
-    dataSet1_off_userMerchant_feature1 = pd.merge(dataSet1_off_userMerchant_feature1, t4, how='left',
-                                                  on=['user_id', 'merchant_id'])
-    dataSet1_off_userMerchant_feature1 = pd.merge(dataSet1_off_userMerchant_feature1, t5, how='left',
-                                                  on=['user_id', 'merchant_id'])
-    dataSet1_off_userMerchant_feature1 = pd.merge(dataSet1_off_userMerchant_feature1, t6, how='left',
-                                                  on=['user_id', 'merchant_id'])
-    dataSet1_off_userMerchant_feature1 = dataSet1_off_userMerchant_feature1.fillna(0)
-    print(dataSet1_off_userMerchant_feature1.columns)
-    dataSet1_off_userMerchant_feature1.to_csv('dataSet1_off_userMerchant_feature1.csv', index=None)
-
-
+    left = dataSet1
+    dataSet1_feature3 = pd.merge(left, t, how='left', on=['user_id', 'date_received'])
+    dataSet1_feature3 = pd.merge(dataSet1_feature3, t1, how='left', on=['user_id', 'date_received'])
+    dataSet1_feature3 = pd.merge(dataSet1_feature3, t2, how='left', on=['user_id', 'date_received'])
+    dataSet1_feature3 = pd.merge(dataSet1_feature3, t3, how='left', on=['user_id', 'coupon_id'])
+    dataSet1_feature3 = pd.merge(dataSet1_feature3, t4, how='left', on=['user_id'])
+    dataSet1_feature3 = pd.merge(dataSet1_feature3, t5, how='left', on=['user_id', 'coupon_id'])
+    dataSet1_feature3 = dataSet1_feature3.fillna(0)
+    dataSet1_feature3.to_csv('dataSet1_feature3.csv', index=None)
 
 
 
